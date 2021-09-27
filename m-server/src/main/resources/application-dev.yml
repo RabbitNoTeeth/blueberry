@@ -1,0 +1,71 @@
+# http
+server:
+  port: 10001
+
+# 数据库
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.3.101:3306/devmanagesip?useSSL=false&useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC&nullCatalogMeansCurrent=true
+    username: root
+    password: hik12345
+
+# sip
+sip:
+  name: GB28181-server
+  host: 192.168.3.65
+  port: 5060
+  id: 13020000002000912345
+  domain: 1302000000
+  password: admin123
+  traceLevel: NONE
+  logMessageContent: false
+  deviceExpires: 300
+
+# 媒体服务器
+media:
+  ip: 192.168.3.65
+  httpPort: 80
+  rtpPort: 10086
+  secret: 035c73f7-bb6b-4889-a715-d9eb2d1925cc
+  snapshotSavaPath: ./image/snapshots
+
+# 视频质量检测
+video-quality-detect:
+  supportedArithmetics:
+    - COVER:遮挡检测
+    - NOISE:噪声检测
+    - STRIPE:条纹检测
+    - COLOR_CAST:偏色检测
+    - BRIGHTNESS:亮度检测
+    - SHARPNESS:清晰度检测
+    - ANGLE_CHANGE:角度变化检测
+
+# 视频无人观看检测
+video-no-reader-check:
+  # 无人观看状态下视频存活时间
+  aliveSeconds: 180
+
+# http钩子
+http-hook:
+  enable: false
+  timeout: 10
+  onVideoQualityDetect: http://localhost:8080/devManage_war_exploded/devManageSip/hook/listen/onStreamQualityDetect
+  onDeviceOnline:
+  onDeviceOffline:
+  onDeviceCreated:
+  onDeviceUpdated:
+  onDeviceRemoved:
+  onChannelOnline: http://localhost:8080/devManage_war_exploded/devManageSip/hook/listen/onChannelOnline
+  onChannelOffline: http://localhost:8080/devManage_war_exploded/devManageSip/hook/listen/onChannelOffline
+  onChannelCreated: http://localhost:8080/devManage_war_exploded/devManageSip/hook/listen/onChannelUpdate
+  onChannelUpdated: http://localhost:8080/devManage_war_exploded/devManageSip/hook/listen/onChannelUpdate
+  onChannelRemoved:
+
+permission:
+  check: false
+  code: E6pAkretV+PcRSXdwoLqA28j8/YjT2gUkOqwBR7YBV53KLuKQxyNZca19OsTPY8wZt/3R1bhyDw=
+
+# 日志配置
+logging:
+  config: classpath:logback-dev.xml
