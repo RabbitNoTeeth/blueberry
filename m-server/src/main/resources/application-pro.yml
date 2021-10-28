@@ -49,7 +49,7 @@ video-no-reader-check:
 http-hook:
   enable: true
   timeout: 10
-  onVideoQualityDetect: http://localhost:8080/devManage/devManageSip/hook/listen/onStreamQualityDetect
+  onVideoQualityDetect:
   onDeviceOnline:
   onDeviceOffline:
   onDeviceCreated:

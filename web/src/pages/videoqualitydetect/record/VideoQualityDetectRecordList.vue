@@ -1,11 +1,12 @@
 <template>
   <div class="main_content">
     <q-table
+      class="table_full"
+      virtual-scroll
+      :virtual-scroll-sticky-size-start="48"
       :data="data"
       :columns="columns"
       row-key="field"
-      style="height: 100%"
-      virtual-scroll
       :pagination="{ rowsPerPage: 0 }"
     >
       <template v-slot:top>

@@ -6,9 +6,9 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.3.101:3306/devmanagesip?useSSL=false&useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC&nullCatalogMeansCurrent=true
+    url: jdbc:mysql://localhost:3306/blueberry?useSSL=false&useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC&nullCatalogMeansCurrent=true
     username: root
-    password: hik12345
+    password: 123456
 
 # sip
 sip:
