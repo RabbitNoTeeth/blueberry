@@ -4,6 +4,7 @@ import fun.bookish.blueberry.core.page.PageResult;
 import fun.bookish.blueberry.server.channel.entity.ChannelPO;
 import com.baomidou.mybatisplus.extension.service.IService;
 import fun.bookish.blueberry.server.channel.entity.ChannelQueryParamVO;
+import fun.bookish.blueberry.server.channel.entity.ChannelStatusSync;
 import fun.bookish.blueberry.server.channel.entity.ChannelVO;
 import fun.bookish.blueberry.server.device.entity.DeviceVO;
 
@@ -36,5 +37,7 @@ public interface IChannelService extends IService<ChannelPO> {
     String addOrUpdate(ChannelPO channelPO);
 
     void addOrUpdate(List<ChannelPO> channels) throws Exception;
+
+    List<ChannelStatusSync> queryChannelStatusSyncList();
 
 }

@@ -3,15 +3,12 @@ package fun.bookish.blueberry.server.videoqualitydetect.detect;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import fun.bookish.blueberry.core.exception.ManualRollbackException;
-import fun.bookish.blueberry.core.utils.FileUtils;
 import fun.bookish.blueberry.core.utils.JsonUtils;
 import fun.bookish.blueberry.opencv.detector.*;
 import fun.bookish.blueberry.server.channel.entity.ChannelPO;
 import fun.bookish.blueberry.server.channel.service.IChannelService;
 import fun.bookish.blueberry.server.device.entity.DevicePO;
 import fun.bookish.blueberry.server.device.service.IDeviceService;
-import fun.bookish.blueberry.server.hook.HttpHookExecutor;
-import fun.bookish.blueberry.server.schedule.conf.VideoQualityDetectProperties;
 import fun.bookish.blueberry.server.videoqualitydetect.arithmetic.entity.VideoQualityDetectArithmeticPO;
 import fun.bookish.blueberry.server.videoqualitydetect.arithmetic.service.IVideoQualityDetectArithmeticService;
 import fun.bookish.blueberry.server.videoqualitydetect.arithmeticapplydevice.service.IVideoQualityDetectArithmeticApplyDeviceService;
@@ -19,7 +16,6 @@ import fun.bookish.blueberry.server.videoqualitydetect.detect.entity.VideoStream
 import fun.bookish.blueberry.server.videoqualitydetect.record.entity.VideoQualityDetectRecordPO;
 import fun.bookish.blueberry.server.videoqualitydetect.record.service.IVideoQualityDetectRecordService;
 import fun.bookish.blueberry.server.videostream.service.IVideoStreamService;
-import fun.bookish.blueberry.server.zlmedia.connect.ZLMediaKitConnection;
 import org.apache.commons.lang3.StringUtils;
 import org.bytedeco.opencv.global.opencv_imgcodecs;
 import org.bytedeco.opencv.opencv_core.Mat;
@@ -30,8 +26,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 @Service
 public class VideoStreamDetectService {
@@ -50,8 +44,6 @@ public class VideoStreamDetectService {
     private IVideoQualityDetectArithmeticService videoQualityDetectArithmeticService;
     @Autowired
     private IVideoQualityDetectArithmeticApplyDeviceService videoQualityDetectArithmeticApplyDeviceService;
-    @Autowired
-    private HttpHookExecutor httpHookExecutor;
 
     /**
      * 检测视频流图像质量
@@ -99,15 +91,6 @@ public class VideoStreamDetectService {
             // todo 暂时未找到直接用byte数组构建出正确Mat对象的方法，后续可以优化，这样便不需要多读取一次本地图像文件
             // 进行图片质量检测
             detectResult = doQualityDetect(deviceId, channelId, imagePath, arithmeticPOS, time);
-            // 触发http hook
-            HttpHookExecutor.VideoQualityDetect hookData = new HttpHookExecutor.VideoQualityDetect();
-            hookData.setDeviceId(deviceId);
-            hookData.setChannelId(channelId);
-            hookData.setHasError(detectResult.getHasQualityError());
-            hookData.setError(detectResult.getQualityError());
-            hookData.setSnapshot(imagePath);
-            hookData.setDetail(detectResult.getDetail());
-            httpHookExecutor.onVideoQualityDetect(hookData);
             // 返回检测结果
             return detectResult;
         } catch (Exception e) {

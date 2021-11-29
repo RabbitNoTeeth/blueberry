@@ -46,22 +46,6 @@ video-no-reader-check:
   # 无人观看状态下视频存活时间
   aliveSeconds: 180
 
-# http钩子
-http-hook:
-  enable: false
-  timeout: 10
-  onVideoQualityDetect: http://localhost:8080/devManage_war_exploded/devManageSip/hook/listen/onStreamQualityDetect
-  onDeviceOnline:
-  onDeviceOffline:
-  onDeviceCreated:
-  onDeviceUpdated:
-  onDeviceRemoved:
-  onChannelOnline: http://localhost:8080/devManage_war_exploded/devManageSip/hook/listen/onChannelOnline
-  onChannelOffline: http://localhost:8080/devManage_war_exploded/devManageSip/hook/listen/onChannelOffline
-  onChannelCreated: http://localhost:8080/devManage_war_exploded/devManageSip/hook/listen/onChannelUpdate
-  onChannelUpdated: http://localhost:8080/devManage_war_exploded/devManageSip/hook/listen/onChannelUpdate
-  onChannelRemoved:
-
 permission:
   check: false
   code: E6pAkretV+PcRSXdwoLqA28j8/YjT2gUkOqwBR7YBV53KLuKQxyNZca19OsTPY8wZt/3R1bhyDw=

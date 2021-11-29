@@ -13,10 +13,7 @@ import fun.bookish.blueberry.server.device.entity.DeviceVO;
 import fun.bookish.blueberry.server.device.mapper.DeviceMapper;
 import fun.bookish.blueberry.server.device.service.IDeviceService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import fun.bookish.blueberry.server.hook.HttpHookExecutor;
 import fun.bookish.blueberry.server.sip.conf.SipProperties;
-import fun.bookish.blueberry.server.videoqualitydetect.arithmetic.entity.VideoQualityDetectArithmeticPO;
-import fun.bookish.blueberry.server.videoqualitydetect.arithmetic.entity.VideoQualityDetectArithmeticVO;
 import fun.bookish.blueberry.sip.utils.DateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,42 +37,13 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, DevicePO> imple
     @Autowired
     private IChannelService channelService;
     @Autowired
-    private HttpHookExecutor httpHookExecutor;
-    @Autowired
     private SipProperties sipProperties;
     @Value("${server.port}")
     private Integer serverPort;
 
     @Override
-    public boolean save(DevicePO entity) {
-        boolean success = super.save(entity);
-        // 触发http hook
-        if (success) {
-            HttpHookExecutor.DeviceEntity device = HttpHookExecutor.DeviceEntity.mapFromDevicePO(query().eq("id", entity.getId()).one());
-            device.setServerIp(sipProperties.getHost());
-            device.setServerPort(serverPort);
-            httpHookExecutor.onDeviceCreated(device);
-        }
-        return success;
-    }
-
-    @Override
-    public boolean updateById(DevicePO entity) {
-        boolean success = super.updateById(entity);
-        // 触发http hook
-        if (success) {
-            HttpHookExecutor.DeviceEntity device = HttpHookExecutor.DeviceEntity.mapFromDevicePO(queryById(entity.getId()));
-            device.setServerIp(sipProperties.getHost());
-            device.setServerPort(serverPort);
-            httpHookExecutor.onDeviceUpdated(device);
-        }
-        return success;
-    }
-
-    @Override
     public String add(DeviceVO deviceVO) {
         DevicePO devicePO = BeanUtils.convert(deviceVO, DevicePO.class);
-        devicePO.setOnline(0);
         String now = DateUtils.getNowDateTimeStr();
         devicePO.setCreatedAt(now);
         devicePO.setUpdatedAt(now);
@@ -97,12 +65,6 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, DevicePO> imple
     public String deleteById(String id) {
         boolean success = removeById(id);
         channelService.deleteByDeviceId(id);
-        // 触发http hook
-        if (success) {
-            HttpHookExecutor.DeviceRemove hookData = new HttpHookExecutor.DeviceRemove();
-            hookData.setDeviceId(id);
-            httpHookExecutor.onDeviceRemoved(hookData);
-        }
         return id;
     }
 
@@ -117,7 +79,6 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, DevicePO> imple
         String id = params.getId();
         String name = params.getName();
         String type = params.getType();
-        Integer online = params.getOnline();
         if (StringUtils.isNotBlank(id)) {
             query.like("id", id);
         }
@@ -126,9 +87,6 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, DevicePO> imple
         }
         if (StringUtils.isNotBlank(type)) {
             query.eq("type", type);
-        }
-        if (online != null) {
-            query.eq("online", online);
         }
         List<DevicePO> list = query.orderByDesc("created_at").list();
         return BeanUtils.convert(list, DeviceVO.class);
@@ -143,7 +101,6 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, DevicePO> imple
             String id = params.getId();
             String name = params.getName();
             String type = params.getType();
-            Integer online = params.getOnline();
             if (StringUtils.isNotBlank(id)) {
                 query.like("id", id);
             }
@@ -152,9 +109,6 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, DevicePO> imple
             }
             if (StringUtils.isNotBlank(type)) {
                 query.eq("type", type);
-            }
-            if (online != null) {
-                query.eq("online", online);
             }
             Page<DevicePO> pageEntity = new Page<>();
             pageEntity.setCurrent(page);

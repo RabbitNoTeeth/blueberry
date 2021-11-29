@@ -163,11 +163,11 @@ export default {
           {name: 'model', field: 'model', label: '型号', align: 'left'},
           {name: 'rtsp', field: 'rtsp', label: 'rtsp', align: 'left'},
           {
-            name: 'status',
-            field: 'status',
+            name: 'online',
+            field: 'online',
             label: '状态',
             align: 'left',
-            format: (val, row) => val === 'ON' ? '在线' : '离线'
+            format: (val, row) => val === 'ONLINE' ? '在线' : '离线'
           },
           {name: 'operations', field: 'operations', label: '操作', align: 'left'}
         ]

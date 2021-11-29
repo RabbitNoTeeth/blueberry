@@ -38,6 +38,6 @@ spring:
             threadsInheritContextClassLoaderOfInitializingThread: true
 
 mybatis:
-  mapper-locations: mapper/**/*.xml
+  mapper-locations: classpath*:fun/bookish/blueberry/**/mapper/**/*.xml
   configuration:
     map-underscore-to-camel-case: true

@@ -43,6 +43,11 @@ public class ChannelPO implements Serializable {
     private String model;
 
     /**
+     * 设备固件版本
+     */
+    private String firmware;
+
+    /**
      * 当为设备时,设备归属(必选)
      */
     private String owner;
@@ -140,8 +145,31 @@ public class ChannelPO implements Serializable {
 
     /**
      * 设备状态(必选)
+     *      ON
+     *      OFF
      */
     private String status;
+
+    /**
+     * 在线状态(必选)
+     *      ONLINE
+     *      OFFLINE
+     */
+    private String online;
+
+    /**
+     * 是否编码(可选)
+     *      ON
+     *      OFF
+     */
+    private String encode;
+
+    /**
+     * 是否录像(可选)
+     *      ON
+     *      OFF
+     */
+    private String record;
 
     /**
      * 经度(可选)
@@ -623,5 +651,37 @@ public class ChannelPO implements Serializable {
         ", createdAt=" + createdAt +
         ", updatedAt=" + updatedAt +
         "}";
+    }
+
+    public String getOnline() {
+        return online;
+    }
+
+    public void setOnline(String online) {
+        this.online = online;
+    }
+
+    public String getEncode() {
+        return encode;
+    }
+
+    public void setEncode(String encode) {
+        this.encode = encode;
+    }
+
+    public String getRecord() {
+        return record;
+    }
+
+    public void setRecord(String record) {
+        this.record = record;
+    }
+
+    public String getFirmware() {
+        return firmware;
+    }
+
+    public void setFirmware(String firmware) {
+        this.firmware = firmware;
     }
 }

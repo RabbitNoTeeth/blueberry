@@ -4,7 +4,6 @@ import fun.bookish.blueberry.server.channel.entity.ChannelPO;
 import fun.bookish.blueberry.server.channel.service.IChannelService;
 import fun.bookish.blueberry.server.device.entity.DevicePO;
 import fun.bookish.blueberry.server.device.service.IDeviceService;
-import fun.bookish.blueberry.server.hook.HttpHookExecutor;
 import fun.bookish.blueberry.server.openapi.entity.OpenDeviceStatusVO;
 import fun.bookish.blueberry.server.openapi.entity.OpenDeviceVO;
 import fun.bookish.blueberry.server.openapi.service.IOpenApiService;

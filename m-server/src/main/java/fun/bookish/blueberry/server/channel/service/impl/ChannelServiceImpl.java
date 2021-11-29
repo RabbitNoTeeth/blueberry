@@ -10,21 +10,19 @@ import fun.bookish.blueberry.core.page.PageResult;
 import fun.bookish.blueberry.core.utils.BeanUtils;
 import fun.bookish.blueberry.server.channel.entity.ChannelPO;
 import fun.bookish.blueberry.server.channel.entity.ChannelQueryParamVO;
+import fun.bookish.blueberry.server.channel.entity.ChannelStatusSync;
 import fun.bookish.blueberry.server.channel.entity.ChannelVO;
 import fun.bookish.blueberry.server.channel.mapper.ChannelMapper;
 import fun.bookish.blueberry.server.channel.service.IChannelService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import fun.bookish.blueberry.server.device.entity.DevicePO;
-import fun.bookish.blueberry.server.device.entity.DeviceVO;
 import fun.bookish.blueberry.server.device.service.IDeviceService;
-import fun.bookish.blueberry.server.hook.HttpHookExecutor;
 import fun.bookish.blueberry.server.sip.conf.SipProperties;
 import fun.bookish.blueberry.sip.utils.DateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -42,43 +40,9 @@ public class ChannelServiceImpl extends ServiceImpl<ChannelMapper, ChannelPO> im
     @Autowired
     private IDeviceService deviceService;
     @Autowired
-    private HttpHookExecutor httpHookExecutor;
-    @Autowired
     private SipProperties sipProperties;
     @Value("${server.port}")
     private Integer serverPort;
-
-    @Override
-    public boolean save(ChannelPO entity) {
-        boolean success = super.save(entity);
-        // 触发http hook
-        if (success) {
-            String deviceId = entity.getDeviceId();
-            HttpHookExecutor.ChannelEntity channel = HttpHookExecutor.ChannelEntity.mapFromChannelPO(queryByIdAndDeviceId(entity.getId(), deviceId));
-            HttpHookExecutor.DeviceEntity device = HttpHookExecutor.DeviceEntity.mapFromDevicePO(deviceService.queryById(deviceId));
-            device.setServerIp(sipProperties.getHost());
-            device.setServerPort(serverPort);
-            channel.setDevice(device);
-            httpHookExecutor.onChannelCreated(channel);
-        }
-        return success;
-    }
-
-    @Override
-    public boolean update(ChannelPO entity, Wrapper<ChannelPO> updateWrapper) {
-        boolean success = super.update(entity, updateWrapper);
-        // 触发http hook
-        if (success) {
-            String deviceId = entity.getDeviceId();
-            HttpHookExecutor.ChannelEntity channel = HttpHookExecutor.ChannelEntity.mapFromChannelPO(queryByIdAndDeviceId(entity.getId(), deviceId));
-            HttpHookExecutor.DeviceEntity device = HttpHookExecutor.DeviceEntity.mapFromDevicePO(deviceService.queryById(deviceId));
-            device.setServerIp(sipProperties.getHost());
-            device.setServerPort(serverPort);
-            channel.setDevice(device);
-            httpHookExecutor.onChannelUpdated(channel);
-        }
-        return success;
-    }
 
     @Override
     public boolean remove(Wrapper<ChannelPO> queryWrapper) {
@@ -113,13 +77,6 @@ public class ChannelServiceImpl extends ServiceImpl<ChannelMapper, ChannelPO> im
         QueryWrapper<ChannelPO> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("id", id).eq("device_id", deviceId);
         boolean success = remove(queryWrapper);
-        // 触发http hook
-        if (success) {
-            HttpHookExecutor.ChannelRemove hookData = new HttpHookExecutor.ChannelRemove();
-            hookData.setDeviceId(deviceId);
-            hookData.setChannelId(id);
-            httpHookExecutor.onChannelRemoved(hookData);
-        }
         return id;
     }
 
@@ -214,6 +171,11 @@ public class ChannelServiceImpl extends ServiceImpl<ChannelMapper, ChannelPO> im
             i++;
         }
         channels.forEach(this::addOrUpdate);
+    }
+
+    @Override
+    public List<ChannelStatusSync> queryChannelStatusSyncList() {
+        return baseMapper.queryChannelStatusSyncList();
     }
 
 }

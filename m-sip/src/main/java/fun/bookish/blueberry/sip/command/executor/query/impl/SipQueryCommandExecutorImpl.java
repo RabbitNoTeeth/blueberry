@@ -68,7 +68,7 @@ public class SipQueryCommandExecutorImpl extends AbstractSipQueryCommandExecutor
     public void queryDeviceStatus(SipQueryDeviceStatusParam param) throws SipCommandExecuteException {
         String toDeviceId = param.getDeviceId();
         String toAddress = param.getDeviceAddress();
-        String deviceId = param.getDeviceId();
+        String deviceId = param.getQueryDeviceId();
         String transport = param.getTransport();
         String to = "<" + toDeviceId + "@" + deviceId + ">";
         try {

@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="fun.bookish.blueberry.server.a.channel.mapper.ChannelMapper">
+<mapper namespace="fun.bookish.blueberry.server.channel.mapper.ChannelMapper">
+
+    <select id="queryChannelStatusSyncList" resultType="fun.bookish.blueberry.server.channel.entity.ChannelStatusSync">
+        select
+            a.id as id,
+            a.device_id as device_id,
+            b.sip_server_address as address,
+            b.command_transport as transport
+        from
+            t_channel a
+        left join
+            t_device b on b.id = a.device_id
+    </select>
 
 </mapper>

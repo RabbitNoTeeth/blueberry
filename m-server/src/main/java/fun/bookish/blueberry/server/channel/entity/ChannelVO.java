@@ -22,28 +22,31 @@ public class ChannelVO implements Serializable {
     @ApiModelProperty(value = "通道编码", required = true)
     private String id;
 
-    @ApiModelProperty(value = "设备编码", required = true)
+    @ApiModelProperty(value = "设备/区域/系统编码", required = true)
     private String deviceId;
 
-    @ApiModelProperty(value = "通道名称", required = true)
+    @ApiModelProperty(value = "设备/区域/系统名称", required = true)
     private String name;
 
     @ApiModelProperty(value = "设备厂商")
     private String manufacturer;
 
-    @ApiModelProperty(value = "设备厂商")
+    @ApiModelProperty(value = "设备型号")
     private String model;
 
-    @ApiModelProperty(value = "设备厂商")
+    @ApiModelProperty(value = "设备归属")
     private String owner;
 
-    @ApiModelProperty(value = "设备厂商")
+    @ApiModelProperty(value = "设备固件版本")
+    private String firmware;
+
+    @ApiModelProperty(value = "行政区域")
     private String civilCode;
 
-    @ApiModelProperty(value = "设备厂商")
+    @ApiModelProperty(value = "警区")
     private String block;
 
-    @ApiModelProperty(value = "设备厂商")
+    @ApiModelProperty(value = "安装地址")
     private String address;
 
     @ApiModelProperty(value = "是否有子设备", required = true, example = "0")
@@ -87,6 +90,15 @@ public class ChannelVO implements Serializable {
 
     @ApiModelProperty(value = "设备状态", required = true)
     private String status;
+
+    @ApiModelProperty(value = "在线状态", required = true)
+    private String online;
+
+    @ApiModelProperty(value = "是否编码", required = true)
+    private String encode;
+
+    @ApiModelProperty(value = "是否录像", required = true)
+    private String record;
 
     @ApiModelProperty(value = "经度", example = "0.0")
     private Double longitude;
@@ -433,6 +445,30 @@ public class ChannelVO implements Serializable {
         this.rtsp = rtsp;
     }
 
+    public String getOnline() {
+        return online;
+    }
+
+    public void setOnline(String online) {
+        this.online = online;
+    }
+
+    public String getEncode() {
+        return encode;
+    }
+
+    public void setEncode(String encode) {
+        this.encode = encode;
+    }
+
+    public String getRecord() {
+        return record;
+    }
+
+    public void setRecord(String record) {
+        this.record = record;
+    }
+
     public String getCreatedAt() {
         return createdAt;
     }
@@ -447,6 +483,14 @@ public class ChannelVO implements Serializable {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getFirmware() {
+        return firmware;
+    }
+
+    public void setFirmware(String firmware) {
+        this.firmware = firmware;
     }
 
     @Override
