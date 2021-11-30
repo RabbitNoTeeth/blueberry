@@ -40,7 +40,7 @@ public class OpenApiServiceImpl implements IOpenApiService {
                 .map(c -> {
                     OpenDeviceStatusVO openDeviceStatusVO = new OpenDeviceStatusVO();
                     openDeviceStatusVO.setId(c.getId());
-                    openDeviceStatusVO.setOnline(c.getStatus());
+                    openDeviceStatusVO.setOnline(c.getOnline());
                     return openDeviceStatusVO;
                 })
                 .collect(Collectors.toList());
@@ -52,7 +52,7 @@ public class OpenApiServiceImpl implements IOpenApiService {
         if (channelPO != null) {
             OpenDeviceStatusVO openDeviceStatusVO = new OpenDeviceStatusVO();
             openDeviceStatusVO.setId(channelPO.getId());
-            openDeviceStatusVO.setOnline(channelPO.getStatus());
+            openDeviceStatusVO.setOnline(channelPO.getOnline());
             return openDeviceStatusVO;
         }
         return null;
